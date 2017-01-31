@@ -4,12 +4,13 @@
 This file is part of the flask+d3 Hello World project.
 """
 import json
-import flask
-from flask import request
+from flask import Flask, request, render_template
 import numpy as np
+from main import findTopics
 
 
-app = flask.Flask(__name__)
+
+app = Flask(__name__)
 
 
 
@@ -23,7 +24,7 @@ def gindex():
     muy = request.args.get('muy', '')
     if len(mux)==0: mux="3."
     if len(muy)==0: muy="3."
-    return flask.render_template("pagelayout.html",mux=mux,muy=muy)
+    return render_template("pagelayout4.html",mux=mux,muy=muy)
 
 
 
@@ -42,12 +43,33 @@ def gdata(ndata=10,mux=.5,muy=0.5):
 
     """
 
-    x = np.random.normal(mux,.5,ndata)
-    y = np.random.normal(muy,.5,ndata)
-    A = 10. ** np.random.rand(ndata)
-    c = np.random.rand(ndata)
-    return json.dumps([{"_id": i, "x": x[i], "y": y[i], "area": A[i], "color": c[i]}
-                        for i in range(ndata)])
+    #pull 'birth_month' from input field and store it
+    #patient = int(request.args.get('mux'))
+    
+    # find topics
+    topics = findTopics(5960)
+    
+    ntopics = len(topics['titles'])
+    A = [len(i) for i in topics['titles']]
+    x = np.arange(ntopics)
+    y = [0]*ntopics
+    c = np.random.rand(ntopics)
+    t = ['topic{}'.format(i+1) for i in range(ntopics)]
+
+#    summs_titles = []
+#    for i,s in enumerate(topics['summaries']):
+#        summs_titles.append(dict(summary = ' | '.join(s), titles = ''))
+#        for t in topics['titles'][i]:
+#             summs_titles.append(dict(summary = '', titles = t.decode('utf8').encode('ascii', 'ignore')))
+#    
+#    return render_template('output.html',topics=summs_titles)
+
+
+
+    return json.dumps([{"_id": i, "x": x[i], "y": y[i], "area": A[i], "color": c[i], "tname": t[i]}
+                        for i in range(ntopics)])
+    
+    
 
 if __name__ == "__main__":
     import os
@@ -58,5 +80,4 @@ if __name__ == "__main__":
     os.system("open http://localhost:{0}/".format(port))
 
     # Set up the development server on port 8000.
-    app.debug = True
-    app.run(port=port)
+    app.run(port=port, debug = True)
