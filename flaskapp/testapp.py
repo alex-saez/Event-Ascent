@@ -53,7 +53,8 @@ def gdata(ndata=10,mux=.5,muy=0.5):
     A = [len(i) for i in topics['titles']]
     x = np.arange(ntopics)
     y = [0]*ntopics
-    c = np.random.rand(ntopics)
+    #col = np.linspace(0,1,ntopics)[np.random.permutation(ntopics)]
+    col = ["#156b87", "#876315", "#543510", "#872815"]*2
     t = ['topic{}'.format(i+1) for i in range(ntopics)]
 
 #    summs_titles = []
@@ -66,7 +67,7 @@ def gdata(ndata=10,mux=.5,muy=0.5):
 
 
 
-    return json.dumps([{"_id": i, "x": x[i], "y": y[i], "area": A[i], "color": c[i], "tname": t[i]}
+    return json.dumps([{"_id": i, "x": x[i], "y": y[i], "area": A[i], "color": col[i], "tname": t[i]}
                         for i in range(ntopics)])
     
     
