@@ -15,42 +15,31 @@ app = Flask(__name__)
 
 
 @app.route("/")
-@app.route('/<int:mux>')
+@app.route('/<int:inputdate>')
 def gindex():
-    """
-    When you request the gaus path, you'll get the gaus.html template.
-
-    """
     
     #pull date from input field
-    #mux = int(request.args.get('mux'))
-
-    mux = request.args.get('mux',6190)
-    return render_template("pagelayout4.html",mux=mux)
+    inputdate = request.args.get('inputdate',5960)
+    return render_template("pagelayout4.html",inputdate=inputdate)
 
 
 @app.route('/gdata')
-@app.route('/gdata/<int:mux>')
-def gdata(mux=None):
+@app.route('/gdata/<int:inputdate>')
+def gdata(inputdate=None):
     
-    mux = int(request.args.get('mux'))
+    inputdate = int(request.args.get('inputdate'))
 
     
     # find topics
-    topics = findTopics(mux)
+    topics = findTopics(inputdate)
     
     ntopics = len(topics['titles'])
     A = [len(i) for i in topics['titles']]
     x = np.arange(ntopics)
     y = [0]*ntopics
-
-
     col = ["#156b87", "#876315", "#543510", "#872815"]*2
-          
-         
 #    t = [[w+' ' for w in topics['summaries'][i]] for i in range(ntopics)]
-    kw = ['\n'.join(t) for t in topics['summaries']]
-    
+    kw = ['\n'.join(t) for t in topics['summaries']]    
     summ = topics['titles']
 
 #    summs_titles = []
@@ -60,7 +49,6 @@ def gdata(mux=None):
 #             summs_titles.append(dict(summary = '', titles = t.decode('utf8').encode('ascii', 'ignore')))
 #    
 #    return render_template('output.html',topics=summs_titles)
-
 
 
     return json.dumps([{"_id": i, 
@@ -76,9 +64,9 @@ def gdata(mux=None):
 if __name__ == "__main__":
     import os
 
+    # Open a web browser pointing at the app.
     port = 8000
 
-    # Open a web browser pointing at the app.
     os.system("open http://localhost:{0}/".format(port))
 
     # Set up the development server on port 8000.
