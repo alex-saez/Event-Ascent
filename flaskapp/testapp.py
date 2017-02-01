@@ -20,7 +20,7 @@ def gindex():
     
     #pull date from input field
     inputdate = request.args.get('inputdate',5960)
-    return render_template("pagelayout4.html",inputdate=inputdate)
+    return render_template("pagelayout5.html",inputdate=inputdate)
 
 
 @app.route('/gdata')
@@ -38,9 +38,9 @@ def gdata(inputdate=None):
     x = np.arange(ntopics)
     y = [0]*ntopics
     col = ["#156b87", "#876315", "#543510", "#872815"]*2
-#    t = [[w+' ' for w in topics['summaries'][i]] for i in range(ntopics)]
-    kw = ['\n'.join(t) for t in topics['summaries']]    
-    summ = topics['titles']
+    kw = [' | '.join(t) for t in topics['summaries']]    
+#    kw = topics['summaries']
+    summ = ['<br />'.join(t) for t in topics['titles']]
 
 #    summs_titles = []
 #    for i,s in enumerate(topics['summaries']):
