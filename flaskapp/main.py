@@ -20,7 +20,8 @@ def findTopics(date,
                days_past=1, 
                dist_param=0.7, 
                link_method = 'single', 
-               min_clust_size = 4, 
+               min_clust_size = 3, 
+               max_n_topics = 7, 
                n_summ_words = 5):
     
     
@@ -31,8 +32,9 @@ def findTopics(date,
                 """.format(date-days_past, date)   
     DDtrunc = pd.read_sql_query(sql_query, con)
     del DDtrunc['index']
+    DDtrunc = DDtrunc.ix[DDtrunc.content_lemmas != '',:]
     
-
+    
     lemmas = list(DDtrunc.content_lemmas.apply(lambda x: x.split()))
     
     dictionary = corpora.Dictionary(lemmas)
@@ -52,6 +54,7 @@ def findTopics(date,
     main_clusters = [(i, clust_sizes[i]) for i in range(clust_sizes.size) 
                     if clust_sizes[i] >= min_clust_size]
     main_clusters = sorted(main_clusters, key=lambda x: x[1], reverse=True)
+    main_clusters = main_clusters[:max_n_topics]
     
     # gather lists of titles and contents for each cluster
     main_titles = []
@@ -68,10 +71,10 @@ def findTopics(date,
         
 
     # create key-word summary for each topic
-    summaries = [getMainTerms(main_articles_tfidf[i], dictionary, n_summ_words) 
+    keywords = [getMainTerms(main_articles_tfidf[i], dictionary, n_summ_words) 
                     for i in range(len(main_articles_tfidf))]
-    summaries = [s for s in summaries]
+    keywords = [s for s in keywords]
 
-    return dict(titles = main_titles, summaries = summaries)
+    return dict(titles = main_titles, keywords = keywords)
 
 

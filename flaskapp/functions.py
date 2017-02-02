@@ -9,6 +9,7 @@ from gensim import utils
 import pandas as pd
 import numpy as np
 import psycopg2
+import datetime
 
 def getData():   
     con = psycopg2.connect(database = 'nytimes', user = 'alex')
@@ -48,16 +49,36 @@ def selectSections(D):
 
 
 def getMainTerms(tfidf_vec_list, dictionary, n_top_words=5):
+    banned_words = ['mr','mrs','be']
     flat_list = [i for l in tfidf_vec_list for i in l]
     terms = [t[0] for t in flat_list]
     vals = [t[1] for t in flat_list]
     c = np.bincount(terms, weights=vals)
     term_counts = [(i, c[i]) for i in range(c.size)]
     term_counts = sorted(term_counts, key=lambda x: x[1], reverse=True)
-    top_words = [dictionary.get(t[0])[:-3] for t in term_counts[:n_top_words]]
-    return top_words
+    top_words = [dictionary.get(t[0])[:-3] for t in term_counts[:20]]
+    top_words = [i for i in top_words if i not in banned_words]
+    return top_words[:n_top_words]
+
+
+def Date2Code(date):
+    # input format: 'yyyy-mm-dd'   
+    date_num = [int(i) for i in date.split('-')]
+    day_diff = datetime.date(date_num[0],date_num[1],date_num[2]) - datetime.date(2016,3,15)
+    return 5919 + day_diff.days
+
     
+def Code2Date(datecode):
+    diff = datetime.timedelta(days = datecode - 5919)
+    date = datetime.date(2016,3,15) + diff
+    day = str(date.day)
+    month = str(date.month)
+    year = str(date.year)
+    if len(day)<2: day = '0'+day
+    if len(month)<2: month = '0'+month
+    return '{}-{}-{}'.format(year,month,day)
     
+   
 
 
 #%%

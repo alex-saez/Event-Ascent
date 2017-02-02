@@ -7,6 +7,7 @@ import json
 from flask import Flask, request, render_template
 import numpy as np
 from main import findTopics
+from functions import Date2Code
 
 
 
@@ -18,48 +19,49 @@ app = Flask(__name__)
 @app.route('/<int:inputdate>')
 def gindex():
     
-    #pull date from input field
-    inputdate = request.args.get('inputdate',5960)
+    inputdate = request.args.get('inputdate','2016-04-25')
+    
     return render_template("pagelayout5.html",inputdate=inputdate)
 
 
+
 @app.route('/gdata')
-@app.route('/gdata/<int:inputdate>')
+@app.route('/gdata/<string:inputdate>')
 def gdata(inputdate=None):
     
-    inputdate = int(request.args.get('inputdate'))
-
+    inputdate_code = Date2Code(request.args.get('inputdate'))
     
-    # find topics
-    topics = findTopics(inputdate)
-    
-    ntopics = len(topics['titles'])
-    A = [len(i) for i in topics['titles']]
-    x = np.arange(ntopics)
-    y = [0]*ntopics
-    col = ["#156b87", "#876315", "#543510", "#872815"]*2
-    kw = [' | '.join(t) for t in topics['summaries']]    
-#    kw = topics['summaries']
-    summ = ['<br />'.join(t) for t in topics['titles']]
+    if (inputdate_code > 6230) | (inputdate_code < 5919):
+        
+        return []
 
-#    summs_titles = []
-#    for i,s in enumerate(topics['summaries']):
-#        summs_titles.append(dict(summary = ' | '.join(s), titles = ''))
-#        for t in topics['titles'][i]:
-#             summs_titles.append(dict(summary = '', titles = t.decode('utf8').encode('ascii', 'ignore')))
-#    
-#    return render_template('output.html',topics=summs_titles)
+    else:
+        
+        # find topics
+        min_clust_size = 3
+        topics = findTopics(inputdate_code, min_clust_size=min_clust_size)
+        
+        # format data
+        ntopics = len(topics['titles'])
+        A = [len(i) for i in topics['titles']]
+        x = np.arange(ntopics)
+        y = [0]*ntopics
+        kw = [' | '.join(t) for t in topics['keywords']]
+        summ = ['<br />'.join(t) for t in topics['titles']]
 
-
-    return json.dumps([{"_id": i, 
-                        "x": x[i], 
-                        "y": y[i], 
-                        "area": A[i], 
-                        "color": col[i], 
-                        "keywords": kw[i],
-                        "summary": summ[i]} 
-                      for i in range(ntopics)])
-    
+        colscale = ["#e5e5e5","#e5d5cc","#e5c5b2","#e5b599","#e5a47f",
+                    "#e59466","#e5844c","#e57433"]+["#e56419"]*20
+        col = [colscale[i-min_clust_size] for i in A]
+       
+        return json.dumps([{"_id": i, 
+                            "x": x[i], 
+                            "y": y[i], 
+                            "area": A[i], 
+                            "color": col[i], 
+                            "keywords": kw[i],
+                            "summary": summ[i]} 
+                          for i in range(ntopics)])
+        
 
 if __name__ == "__main__":
     import os

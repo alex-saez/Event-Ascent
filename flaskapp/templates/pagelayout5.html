@@ -16,20 +16,21 @@
 
 <body>
 
-    <div id="viz" style="height:400px;"></div>
+    <div id="viz" style="height:320px;"></div>
 
 
     <div class = "container">
       <form  action="/" method="GET">
 
         <div class="form-group">
-          <input class="slider-width" type="range" id="inputdate" name='inputdate' min="5919" max="6230" value="{{inputdate}}" step="1" />
+        <label for="date">Pick Date:</label>
+         <!--<input class="slider-width" type="range" id="inputdate" name='inputdate' min="5919" max="6230" value="{{inputdate}}" step="1" />  -->
          <!-- <input type="int" id="inputdate" name='inputdate' placeholder="5960 "> -->
+        <input id="inputdate" name='inputdate' type="date" name="bdaytime" value="{{inputdate}}">
         </div>
           
 
         <div>
-          <label for="date">Date:</label>
           <button type="submit" class="btn btn-default btn-lg">Go!</button>
         </div>
 
@@ -38,32 +39,20 @@
     </div>
 
 
-    <br>
-    <br>
-
-    <div id="summWin"> Topic summary </div>
+    <h2>Topic Summary:</h2>
+    <div id="summWin"> </div>
 
 
     <script type="text/javascript">
 
-    /*
-    sampleSVG.append("circle")
-        .style("stroke", "gray")
-        .style("fill", "white")
-        .attr("r", 40)
-        .attr("cx", 50)
-        .attr("cy", 50)       
-       .on("mouseover", function(){d3.select(this).transition().delay(100).duration(1000).attr("r", 10).style("fill", "black")  ;})
-        .on("mouseout", function(){d3.select(this).transition().delay(100).duration(1000).attr("r", 40).style("fill", "white")  ;})
-    */  
-
+ 
     var color = d3.scale.quantize()
                   .range(["#156b87", "#876315", "#543510", "#872815"])
                   .domain([0, 1]);
 
     // Show the information about a particular point.
     var display_summary = function (d) {
-        d3.select("#summWin").html("Topic summary:" +  "<br/>" + d.summary )
+        d3.select("#summWin").html( d.summary )
         d3.select(this).style("stroke-width", 3);
         d3.select(this).style("font-weight", "bold");
     };
@@ -72,7 +61,7 @@
    // handle incoming data
     var callback = function(data) {
 
-        var w = 600, h = 500;
+        var w = 600, h = 400;
         var sampleSVG = d3.select("#viz")
             .append("svg")
             .attr("width", w)
@@ -112,9 +101,12 @@
 
     }
 
-    //{% if inputdate %}
+
+    {% if (("/gdata?inputdate={{inputdate}}").length == 0) %}
+        d3.select("#summWin").html( "oops" )
+    {% else %}
         d3.json("/gdata?inputdate={{inputdate}}", callback);
-    //{% endif %}
+    {% endif %}
 
 
     </script>

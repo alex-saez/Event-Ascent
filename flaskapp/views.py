@@ -26,7 +26,7 @@ def cesareans_page_fancy():
     topics = findTopics(date=5960)
 
     summs_titles = []
-    for i,s in enumerate(topics['summaries']):
+    for i,s in enumerate(topics['keywords']):
         summs_titles.append(dict(summary = ' | '.join(s), titles = ''))
         for t in topics['titles'][i]:
              summs_titles.append(dict(summary = '', titles = t.decode('utf8').encode('ascii', 'ignore')))
@@ -47,7 +47,7 @@ def topics_output():
     topics = findTopics(date=patient)
 
     summs_titles = []
-    for i,s in enumerate(topics['summaries']):
+    for i,s in enumerate(topics['keywords']):
         summs_titles.append(dict(summary = ' | '.join(s), titles = ''))
         for t in topics['titles'][i]:
              summs_titles.append(dict(summary = '', titles = t.decode('utf8').encode('ascii', 'ignore')))
@@ -86,4 +86,13 @@ def topics_output():
 #                           graphJSON=graphJSON)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    import os
+
+    # Open a web browser pointing at the app.
+    port = 7000
+
+    os.system("open http://localhost:{0}/".format(port))
+
+    # Set up the development server on port 8000.
+    app.debug = True
+    app.run(port=port)
