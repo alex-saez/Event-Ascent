@@ -48,6 +48,7 @@ def selectSections(D):
     return D.iloc[[(D.loc[i,'section'] in keep_sections) for i in D.index],:]
 
 
+
 def getMainTerms(tfidf_vec_list, dictionary, n_top_words=5):
     banned_words = ['mr','mrs','be']
     flat_list = [i for l in tfidf_vec_list for i in l]
@@ -59,6 +60,36 @@ def getMainTerms(tfidf_vec_list, dictionary, n_top_words=5):
     top_words = [dictionary.get(t[0])[:-3] for t in term_counts[:20]]
     top_words = [i for i in top_words if i not in banned_words]
     return top_words[:n_top_words]
+
+
+
+def sortHeadlines(DDtrunc, dist_matrix, art_inds):
+    # indices for sorting according to distance to others in the cluster
+    DDtrunc_subset = DDtrunc.iloc[art_inds]
+    mean_dists = np.sum(dist_matrix[art_inds,:][:,art_inds], axis=0)
+    dist_ind = np.argsort(mean_dists)
+    
+    # indices for sorting according to section
+    bad_sections = ['opinion','blogs','upshot','magazine','t-magazine']
+    is_bad_section = [int(s in bad_sections) for s in DDtrunc_subset.section]      
+
+    # indices for discriminating against wording punctuation that indicates less relevance
+    has_bad_punct = []
+    for t in DDtrunc_subset.title:
+        if  t is not None:
+            has_bad_punct.append(int(any([t.find(':')>-1, 
+                                         t.find('?')>-1, 
+                                         t.find('what you need to know')>-1])))
+        else:
+            has_bad_punct.append(0)
+    
+    # finally sort first by section, then by wording, then by distance
+    dtype = [('ind', int), ('sect', int), ('punct', int), ('dist', int)]
+    values = [(i, is_bad_section[i], has_bad_punct[i], dist_ind[i]) for i in range(len(art_inds))]
+    a = np.array(values, dtype=dtype) 
+    a = np.sort(a, order=['sect', 'punct','dist'])
+    return [k[0] for k in a]
+
 
 
 def Date2Code(date):
