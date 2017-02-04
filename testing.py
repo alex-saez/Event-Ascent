@@ -66,7 +66,7 @@ dictionary[3021] # same thing
 [w for i,w in dictionary.items() if i==3021]
  
 # now convert all articles in US section to BOW, this is called a Corpus
-us_articles = [D.content[i].split() for i in range(D.shape[0]) if D.section[i]=='us']
+us_articles = [D.content[i].split() for i in D.index if D.section[i]=='us']
 us_corpus = [dictionary.doc2bow(text) for text in us_articles]
 
 # convert to tf-idf encoding:
@@ -117,5 +117,20 @@ cossim(vec_bow1, vec_bow2)
 vec_tfidf1 = tfidf[corpus[1]]
 vec_tfidf2 = tfidf[corpus[2]]
 cossim(vec_tfidf1, vec_tfidf2)   
+
+#%% Proper LDA 
+import os
+from gensim import corpora, models, similarities, utils
+import pickle
+
+os.chdir('/Users/alex/Dropbox/Insight/Project/')
+DD = pickle.load(open('./D_lemm.obj','r'))
+dictionary = corpora.Dictionary(DD.content_lemmas)
+corpus = [dictionary.doc2bow(text) for text in DD.content_lemmas]
+lda = models.ldamodel.LdaModel(corpus, num_topics=100)
+
+vec_bow1 = dictionary.doc2bow(DD.content_lemmas[10])
+lda[vec_bow1]
+
 
 

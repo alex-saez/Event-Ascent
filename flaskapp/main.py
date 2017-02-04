@@ -13,6 +13,8 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from functions import getMainTerms
+import string
+
 
 
 
@@ -57,15 +59,19 @@ def findTopics(date,
     main_clusters = main_clusters[:max_n_topics]
     
     # gather lists of titles and contents for each cluster
+    clustersizes = []
     main_titles = []
     main_articles_tfidf = []
     for c in main_clusters:
+        clustersizes.append(c[1])
         art_inds = np.where(clusters == c[0])[0]
         titles = []
         vecs = []
         for ind in art_inds:
-            titles.append(DDtrunc.title.iloc[ind])
-            vecs.append(tfidf_model[dictionary.doc2bow(lemmas[ind])])
+            if DDtrunc.title.iloc[ind] is not None:
+                title = string.capwords(DDtrunc.title.iloc[ind]) # capitalize 1st letters
+                titles.append(title)
+                vecs.append(tfidf_model[dictionary.doc2bow(lemmas[ind])])
         main_titles.append(titles)
         main_articles_tfidf.append(vecs)
         
@@ -75,6 +81,8 @@ def findTopics(date,
                     for i in range(len(main_articles_tfidf))]
     keywords = [s for s in keywords]
 
-    return dict(titles = main_titles, keywords = keywords)
+    return dict(titles = main_titles, 
+                keywords = keywords, 
+                clustersizes = clustersizes)
 
 

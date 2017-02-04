@@ -1,56 +1,114 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <script src="http://d3js.org/d3.v2.js"></script> 
-    <!--<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-    <style type="text/css" media="screen">
-        .slider-width {
-            width: 800px;
+    <title>News Snap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <script src="http://d3js.org/d3.v2.js"></script> 
+
+    <style>
+
+        .bodyclass { 
+            background-color:#dddddd ;
         }
+
+
+        .main-background { 
+            background-color:#888888 ;
+        }
+
+        .summary {
+            position: absolute;
+            left: 20px;
+            width: 800px;
+            font-size: 30;
+          <!--  border: 1px solid #000000;
+            padding: 3px; -->
+        }
+
+        h4 {
+            color: black;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+
+        .summary {
+            padding: 0px;
+        }
+
+        .btn-default{
+            height:30px;
+            width:50px;
+            padding:0px;
+        }
+
     </style>
 
 </head>
 
 
 
-<body>
+<body class="bodyclass">
 
-    <div id="viz" style="height:320px;"></div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">News Snap</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Date Explorer</a></li>
+            <li><a href="/gdata?inputdate={{inputdate}}">See data</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
 
+ <br><br><br>
 
     <div class = "container">
       <form  action="/" method="GET">
-
         <div class="form-group">
-        <label for="date">Pick Date:</label>
-         <!--<input class="slider-width" type="range" id="inputdate" name='inputdate' min="5919" max="6230" value="{{inputdate}}" step="1" />  -->
-         <!-- <input type="int" id="inputdate" name='inputdate' placeholder="5960 "> -->
-        <input id="inputdate" name='inputdate' type="date" name="bdaytime" value="{{inputdate}}">
+            <label for="date"> <h4>Pick Date of Interest:</h4> </label>
+            <span style="display:inline-block; width: 20px;"></span>
+            <input id="inputdate" name='inputdate' type="date" value="{{inputdate}}">
+            <span style="display:inline-block; width: 20px;"></span>
+            <button type="submit" class="btn btn-default btn-lg">Go</button>
         </div>
-          
-
-        <div>
-          <button type="submit" class="btn btn-default btn-lg">Go!</button>
-        </div>
-
-
       </form>
     </div>
 
 
-    <h2>Topic Summary:</h2>
-    <div id="summWin"> </div>
+<div class = "main-background">
+    <span style="display:inline-block; width: 10px;"></span>
+    <label for="date"> <h5>Main topics of the day. Bar size reflects number of articles on the topic. Hover for summary:</h5> </label>
+    <div id="viz" class = "vizwin" style="height:270px;"></div>
+    <hr style="border-color:#000000; border-width: 2px;"> 
+</div>
+
+
+    <div class="summary">
+        <h3>Topic Summary:</h3>
+        <div id="summWin"> </div>
+    </div>
+
+
 
 
     <script type="text/javascript">
 
- 
-    var color = d3.scale.quantize()
-                  .range(["#156b87", "#876315", "#543510", "#872815"])
-                  .domain([0, 1]);
-
-    // Show the information about a particular point.
     var display_summary = function (d) {
         d3.select("#summWin").html( d.summary )
         d3.select(this).style("stroke-width", 3);
@@ -58,16 +116,15 @@
     };
 
 
-   // handle incoming data
     var callback = function(data) {
 
-        var w = 600, h = 400;
+        var w = 1000, h = 300;
         var sampleSVG = d3.select("#viz")
             .append("svg")
             .attr("width", w)
             .attr("height", h)
             .append("svg:g")
-            .attr("transform", "translate(10, 50)");
+            .attr("transform", "translate(10, 0)");
 
         var bar_dx=40, bar_dy=30, bar_dist=35
         sampleSVG.selectAll("rect")
@@ -102,11 +159,34 @@
     }
 
 
-    {% if (("/gdata?inputdate={{inputdate}}").length == 0) %}
-        d3.select("#summWin").html( "oops" )
-    {% else %}
+    if({{date_ok}}==0) {
+        d3.select("#viz")
+            .append("svg")
+            .attr("width", 800)
+            .attr("height", 50)
+            .append("svg:g")
+            .attr("transform", "translate(10,20)")
+            .append("text")
+                .attr("x", 30)
+                .attr("y", 10)
+                .style("font-size", 25)
+                .text("Sorry, date is out of range... ")
+         d3.select("#viz")
+           .append("svg")
+            .attr("width", 800)
+            .attr("height", 50)
+            .append("svg:g")
+            .attr("transform", "translate(10,10)")
+            .append("text")
+                .attr("x", 30)
+                .attr("y", 10)
+                .style("font-size", 25)
+                .text("Pick a date between 03/15/2016 and 01/20/2017")
+   } 
+
+   else{
         d3.json("/gdata?inputdate={{inputdate}}", callback);
-    {% endif %}
+    }
 
 
     </script>
