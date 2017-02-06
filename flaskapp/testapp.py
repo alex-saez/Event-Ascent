@@ -23,7 +23,7 @@ def gindex():
     
     # check date is within range
     inputdate_code = Date2Code(inputdate)
-    if (inputdate_code > 6230) | (inputdate_code < 5919):        
+    if (inputdate_code > 6246) | (inputdate_code < 5919):        
         date_ok = 0
     else:
         date_ok = 1

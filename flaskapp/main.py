@@ -30,7 +30,7 @@ def findTopics(date,
     # get data from SQL table:
     con = psycopg2.connect(database = 'nytimes', user = 'alex')    
     sql_query = """
-                SELECT * FROM alldata_lemm WHERE date_in>={} AND date_in<={};
+                SELECT * FROM alldata_lemm2 WHERE date_in>={} AND date_in<={};
                 """.format(date-days_past, date)   
     DDtrunc = pd.read_sql_query(sql_query, con)
     del DDtrunc['index']
@@ -85,79 +85,6 @@ def findTopics(date,
     
 
     return dict(titles = main_titles, 
-                keywords = keywords, 
-                clustersizes = clustersizes)
-
-
-#%%
-
-def findTopicsLDA(date, 
-               days_past=1, 
-               dist_param=0.7, 
-               link_method = 'single', 
-               min_clust_size = 3, 
-               max_n_topics = 7, 
-               n_summ_words = 5):
-    
-    # load LDA model
-    lda = models.LdaModel.load('../../lda_model')   
-    
-    # get data from SQL table:
-    con = psycopg2.connect(database = 'nytimes', user = 'alex')    
-    sql_query = """
-                SELECT * FROM alldata_lemm WHERE date_in>={} AND date_in<={};
-                """.format(date-days_past, date)   
-    DDtrunc = pd.read_sql_query(sql_query, con)
-    del DDtrunc['index']
-    DDtrunc = DDtrunc.ix[DDtrunc.content_lemmas != '',:]
-    
-    
-    lemmas = list(DDtrunc.content_lemmas.apply(lambda x: x.split()))
-    
-    dictionary = corpora.Dictionary(lemmas)
-    corpus = [dictionary.doc2bow(i) for i in lemmas]
-    
-    ldacorpus = lda[corpus]
-    
-    simil_matrix = similarities.MatrixSimilarity(ldacorpus)
-    dist_matrix = 1 - cosine_similarity(simil_matrix)
-
-    linkage_matrix = linkage(dist_matrix, method=link_method)
-    #%%
-    clusters = fcluster(linkage_matrix, .05, criterion='distance')
-    
-    # find largest clusters:
-    clust_sizes = np.bincount(clusters)
-    main_clusters = [(i, clust_sizes[i]) for i in range(clust_sizes.size) 
-                    if clust_sizes[i] >= min_clust_size]
-    main_clusters = sorted(main_clusters, key=lambda x: x[1], reverse=True)
-    main_clusters = main_clusters[:max_n_topics]
-    #%%
-    
-    # gather lists of titles and contents for each cluster
-    clustersizes = []
-    main_titles = []
-    main_articles_tfidf = []
-    for c in main_clusters:
-        clustersizes.append(c[1])
-        art_inds = np.where(clusters == c[0])[0]
-        titles = []
-        vecs = []
-        for ind in art_inds:
-            if DDtrunc.title.iloc[ind] is not None:
-                title = string.capwords(DDtrunc.title.iloc[ind]) # capitalize 1st letters
-                titles.append(title)
-                vecs.append(lda[dictionary.doc2bow(lemmas[ind])])
-        main_titles.append(titles)
-        main_articles_tfidf.append(vecs)
-        
-
-    # create key-word summary for each topic
-    keywords = [getMainTerms(main_articles_tfidf[i], dictionary, n_summ_words) 
-                    for i in range(len(main_articles_tfidf))]
-    keywords = [s for s in keywords]
-
-    topics = dict(titles = main_titles, 
                 keywords = keywords, 
                 clustersizes = clustersizes)
 

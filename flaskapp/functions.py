@@ -10,20 +10,30 @@ import pandas as pd
 import numpy as np
 import psycopg2
 import datetime
+from sqlalchemy import create_engine
+
 
 def getData():   
     con = psycopg2.connect(database = 'nytimes', user = 'alex')
     sql_query = "SELECT * FROM alldata;"
-    return pd.read_sql_query(sql_query,con) ### execute SQL query from Python    
-
-def prepareData(D):  
-    D['content_lemmas'] = D.content.apply(utils.lemmatize)
+    D = pd.read_sql_query(sql_query,con) # execute SQL query from Python
+    del D['row.names']
     return D
+
+def lemmatizeContent(D):  
+    D['content_lemmas'] = D.content.apply(utils.lemmatize)
+    D.content_lemmas =  D.content_lemmas.apply (lambda l: ' '.join(l))
+    return D
+
 
 def selectTimewin(D,t1,t2):
     ind = (D.date_in >= t1) & (D.date_in<=t2)
     return D.ix[ind,:]
     
+def writeToSQL(D, name):
+    engine = create_engine('postgres://%s@localhost/%s'%('alex','nytimes')) 
+    D.to_sql(name, engine, if_exists='replace')
+
 
 def selectSections(D):
     keep_sections = ['magazine',
@@ -79,7 +89,9 @@ def sortHeadlines(DDtrunc, dist_matrix, art_inds):
         if  t is not None:
             has_bad_punct.append(int(any([t.find(':')>-1, 
                                          t.find('?')>-1, 
-                                         t.find('what you need to know')>-1])))
+                                         t.find('what you need to know')>-1, 
+                                         t.find('what we know')>-1,
+                                         t.find('the latest')>-1])))
         else:
             has_bad_punct.append(0)
     
