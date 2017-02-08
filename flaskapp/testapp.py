@@ -6,7 +6,7 @@ This file is part of the flask+d3 Hello World project.
 import json
 from flask import Flask, request, render_template
 from main import findTopics
-from functions import Date2Code
+from functions import Date2Code, assignColors
 
 
 
@@ -25,21 +25,20 @@ def gindex():
     if (inputdate_code > 6246) | (inputdate_code < 5919):        
         date_ok = 0
         data = []
+        
     else:
         date_ok = 1
 
         # find topics
-        min_clust_size = 3
-        topics = findTopics(inputdate_code, min_clust_size=min_clust_size)    
+        topics = findTopics(inputdate_code)    
+        
         # format data
         ntopics = len(topics['titles'])
         A = topics['clustersizes']
         kw = [' | '.join(t) for t in topics['keywords']]
         summ = ['<br />'.join(t) for t in topics['titles']]
         headlines = topics['titles']
-        colscale = ["#e5e5e5","#e5d5cc","#e5c5b2","#e5b599","#e5a47f",
-                    "#e59466","#e5844c","#e57433"]+["#e56419"]*1000
-        col = [colscale[i - min_clust_size] for i in A]   
+        col = assignColors(A, "#f2f0f7", "#807dba")
         data = [{"area": A[i], 
                 "color": col[i], 
                 "keywords": kw[i],
@@ -59,8 +58,7 @@ def gindex():
 @app.route('/gdata/')
 #@app.route('/gdata/<string:inputdate>')
 def gdata(inputdate=None):    
-    global data
-    
+    global data    
     return json.dumps(data)
    
 #    inputdate_code = Date2Code(request.args.get('inputdate'))

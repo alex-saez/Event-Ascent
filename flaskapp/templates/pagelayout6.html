@@ -24,27 +24,32 @@
         }
 
 
-        .mainblock { 
+        #mainblock { 
             display: flex;
             width: 1000px;
             margin-right: 0px;
         }
 
-        .vizandlabel { 
+        #vizandlabel { 
             height:500;
             background-color:#dddddd ;
         }
 
-        .topicslabel { 
+        #vizandlabelbox { 
+            height:500;
             background-color:#888888 ;
+            border-style: solid;
+            border-width: 2px;
+        }
+
+        #topicslabel { 
             height:40px;
         }
 
-        .vizwin { 
-            background-color:#888888 ;
+        #vizwin { 
         }
 
-        .summary {
+        #summary {
             padding-left: 20px;
             font-size: 18px;
         }
@@ -84,7 +89,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Date Explorer</a></li>
             <li><a href="#contact">About</a></li>
-            <li><a href="/gdata?inputdate={{inputdate}}">See data</a></li>
+            <li><a href="/gdata/">See data</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -105,21 +110,23 @@
     </div>
 
 
-<div class = "mainblock">
+<div id = "mainblock">
 
-    <div class = "vizandlabel">
-        <div class = "topicslabel" >
-            <span style="display:inline-block; width: 10px;"></span>
-            <label for="date"> <h4>Main topics of the day on the NY Times. Hover to see headlines</h4> </label>
+    <div id = "vizandlabel">
+        <div id = "vizandlabelbox">
+            <div id = "topicslabel" >
+                <span style="display:inline-block; width: 10px;"></span>
+                <label for="date"> <h4>Main topics of the day on the NY Times. Hover to see headlines</h4> </label>
+            </div>
+            
+            <div id="viz" class = "vizwin" ></div>
         </div>
-        
-        <div id="viz" class = "vizwin" ></div>
     </div>
 
-    <hr style="border-color:#000000; border-width: 2px;"> 
 
-    <div class="summary">
-        <h3>Headlines by relevance:</h3>
+    <div id="summary">
+        <label > <h3 id="ntopics"></h3> </label>
+        <label> <h3>Headlines, sorted by relevance:</h3> </label>
         <div id="summWin" style="width:700px;"> </div>
     </div>
 
@@ -147,6 +154,7 @@
         }
 */
         d3.select("#summWin").html( d.summary )
+        d3.select("#ntopics").html( d.area )
         d3.select(this).style("stroke-width", 3);
         d3.select(this).style("font-weight", "bold");
 

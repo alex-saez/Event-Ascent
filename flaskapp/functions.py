@@ -123,7 +123,27 @@ def Code2Date(datecode):
     return '{}-{}-{}'.format(year,month,day)
     
    
-
+def assignColors(values, col1, col2):\
+    # assigns hex color that linearly maps each value onto a color ramp between col1 and col2
+    
+    red1 = int(col1[1:3], 16)
+    green1 = int(col1[3:5], 16)
+    blue1 = int(col1[5:7], 16)
+    red2 = int(col2[1:3], 16)
+    green2 = int(col2[3:5], 16)
+    blue2 = int(col2[5:7], 16)
+     
+    values = [i - min(values) for i in values]
+    redramp = np.linspace(red1, red2, max(values)+1)
+    greenramp = np.linspace(green1, green2, max(values)+1)
+    blueramp = np.linspace(blue1, blue2, max(values)+1)
+       
+    return ['#%02x%02x%02x' % (redramp[values[i]], greenramp[values[i]], blueramp[values[i]])
+            for i in range(len(values))]
+    
+    
+    
+    
 
 #%%
 
