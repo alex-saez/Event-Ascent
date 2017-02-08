@@ -127,24 +127,5 @@ def Code2Date(datecode):
 
 #%%
 
-if __name__ == "__main__":
-    L = prepareData(D)
-
-    docs = [DD.content_lemmas[i] for i in DD.index]
-    dictionary = corpora.Dictionary(docs)
+#if __name__ == "__main__":
     
-    dictionary = corpora.Dictionary.load('/Users/alex/Dropbox/Insight/Project/nytdict.txtdic')
-    
-    from gensim.matutils import cossim
-    vec_tfidf1 = tfidf[dictionary.doc2bow(DD.content_lemmas.iloc[1])]
-    vec_tfidf2 = tfidf[dictionary.doc2bow(DD.content_lemmas.iloc[2])]
-    cossim(vec_tfidf1, vec_tfidf2)   
-    
-    
-    import pickle
-    DD = prepareData(DD)
-    pickle.dump(DD, open('D_lemm.obj', 'w')) # from package 'pickle', save any object to disk
-
-
-
-
