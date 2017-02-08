@@ -54,6 +54,16 @@
             font-size: 18px;
         }
 
+        #summWin {
+            padding-left: 0px;
+            font-size: 18px;
+            background-color:#dddddd ;
+        }
+
+        #headline {
+            background-color:#dddddd ;
+        }
+
         h3 {
             margin: 0px;
             padding-bottom: 5px;
@@ -126,7 +136,7 @@
 
     <div id="summary">
         <label > <h3 id="ntopics"></h3> </label>
-        <label> <h3>Headlines, sorted by relevance:</h3> </label>
+        <label> <h3>Headlines, sorted by relevance (click to read article):</h3> </label>
         <div id="summWin" style="width:700px;"> </div>
     </div>
 
@@ -140,20 +150,20 @@
     <script type="text/javascript">
 
     var display_summary = function (d) {
-/*        temp =  d3.select("#summWin")          
-        temp.select("svg").remove()  
-        temp.append("svg")
-            .append("svg:g")
+        temp =  d3.selectAll("#summWin")          
+        temp.selectAll("*").remove();
+        //temp.append("svg")
+            //.append("svg:g")
 
-       for ( var k=0; k<3; k++){
-            temp.append("text")
+       for ( var k=0; k<d.headlines.length; k++){
+            temp.append("html")
                 .attr("y", 15)
                 .style("font-size", 18)
                 .style("font-weigth", "normal")
-                .text( d.headlines[k] )
+                .html( '<a href=' + d.urls[k] + '> <h4 id="headline">' + d.headlines[k] + '</h4> </a>')
         }
-*/
-        d3.select("#summWin").html( d.summary )
+
+        //d3.select("#summWin").html( d.summary )
         d3.select("#ntopics").html( d.area )
         d3.select(this).style("stroke-width", 3);
         d3.select(this).style("font-weight", "bold");

@@ -61,19 +61,23 @@ def findTopics(date,
     # gather lists of titles and contents for each cluster
     clustersizes = []
     main_titles = []
+    main_urls = []
     main_articles_tfidf = []
     for c in main_clusters:
         clustersizes.append(c[1])
         art_inds = np.where(clusters == c[0])[0]
         art_inds = art_inds[sortHeadlines(DDtrunc, dist_matrix, art_inds)] # sort inds by relevance of headline
         titles = []
+        urls = []
         vecs = []
         for ind in art_inds:
             if DDtrunc.title.iloc[ind] is not None:
                 title = string.capitalize(DDtrunc.title.iloc[ind]) # capitalize 1st letters
                 titles.append(title)
+                urls.append(DDtrunc.url.iloc[ind])
                 vecs.append(tfidf_model[dictionary.doc2bow(lemmas[ind])])
         main_titles.append(titles)
+        main_urls.append(urls)
         main_articles_tfidf.append(vecs)
         
 
@@ -85,7 +89,8 @@ def findTopics(date,
     
 
     return dict(titles = main_titles, 
-                keywords = keywords, 
+                keywords = keywords,
+                urls = main_urls,
                 clustersizes = clustersizes)
 
 
