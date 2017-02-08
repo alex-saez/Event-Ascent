@@ -38,12 +38,14 @@ def gindex():
         kw = [' | '.join(t) for t in topics['keywords']]
         summ = ['<br />'.join(t) for t in topics['titles']]
         headlines = topics['titles']
+        urls = topics['urls']
         col = assignColors(A, "#f2f0f7", "#807dba")
         data = [{"area": A[i], 
                 "color": col[i], 
                 "keywords": kw[i],
                 "summary": summ[i],
-                "headlines": headlines[i]} 
+                "headlines": headlines[i],
+                "urls": urls[i]} 
               for i in range(ntopics)]
     
     
