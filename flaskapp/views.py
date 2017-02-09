@@ -4,7 +4,7 @@
 This file is part of the flask+d3 Hello World project.
 """
 import json
-from flask import Flask, request, render_template
+from flask import request, render_template
 from flaskapp import app
 from main import findTopics
 from functions import Date2Code, assignColors
@@ -16,7 +16,7 @@ from functions import Date2Code, assignColors
 def gindex():
     global data
    
-    inputdate = request.args.get('inputdate','2016-04-25')
+    inputdate = request.args.get('inputdate','04/25/2016')
     
     # check date is within range
     inputdate_code = Date2Code(inputdate)
