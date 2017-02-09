@@ -108,8 +108,8 @@ def sortHeadlines(DDtrunc, dist_matrix, art_inds):
 
 def Date2Code(date):
     # input format: 'yyyy-mm-dd'   
-    date_num = [int(i) for i in date.split('-')]
-    day_diff = datetime.date(date_num[0],date_num[1],date_num[2]) - datetime.date(2016,3,15)
+    date_num = [int(i) for i in date.split('/')]
+    day_diff = datetime.date(date_num[2],date_num[0],date_num[1]) - datetime.date(2016,3,15)
     return 5919 + day_diff.days
 
     
@@ -121,7 +121,7 @@ def Code2Date(datecode):
     year = str(date.year)
     if len(day)<2: day = '0'+day
     if len(month)<2: month = '0'+month
-    return '{}-{}-{}'.format(year,month,day)
+    return '{}/{}/{}'.format(month,day,year)
     
    
 def assignColors(values, col1, col2):\
