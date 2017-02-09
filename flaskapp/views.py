@@ -1,98 +1,100 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jan 26 18:03:11 2017
-
-@author: alex
+This file is part of the flask+d3 Hello World project.
 """
-
-from flask import Flask, render_template, request
-#from flaskapp import app
 import json
-#import plotly
-import numpy as np
+from flask import Flask, request, render_template
+from flaskapp import app
 from main import findTopics
-
-
-app = Flask(__name__)
-
+from functions import Date2Code, assignColors
 
 
 
-@app.route('/')
-@app.route('/index')
-def cesareans_page_fancy():
+@app.route("/")
+@app.route('/<int:inputdate>')
+def gindex():
+    global data
+   
+    inputdate = request.args.get('inputdate','2016-04-25')
     
-    topics = findTopics(date=5960)
+    # check date is within range
+    inputdate_code = Date2Code(inputdate)
+    if (inputdate_code > 6246) | (inputdate_code < 5919):        
+        date_ok = 0
+        data = []
+        
+    else:
+        date_ok = 1
 
-    summs_titles = []
-    for i,s in enumerate(topics['keywords']):
-        summs_titles.append(dict(summary = ' | '.join(s), titles = ''))
-        for t in topics['titles'][i]:
-             summs_titles.append(dict(summary = '', titles = t.decode('utf8').encode('ascii', 'ignore')))
+        # find topics
+        topics = findTopics(inputdate_code)    
+        
+        # format data
+        ntopics = len(topics['titles'])
+        A = topics['clustersizes']
+        kw = [' | '.join(t) for t in topics['keywords']]
+        summ = ['<br />'.join(t) for t in topics['titles']]
+        headlines = topics['titles']
+        urls = topics['urls']
+        col = assignColors(A, "#f2f0f7", "#807dba")
+        data = [{"area": A[i], 
+                "color": col[i], 
+                "keywords": kw[i],
+                "summary": summ[i],
+                "headlines": headlines[i],
+                "urls": urls[i]} 
+              for i in range(ntopics)]
     
-    return render_template('basic.html',topics=summs_titles)
-
-
-
-@app.route('/input')
-def topics_input():
-    return render_template("input.html")
-
-@app.route('/output')
-def topics_output():
-    #pull 'birth_month' from input field and store it
-    patient = int(request.args.get('birth_month'))
     
-    topics = findTopics(date=patient)
-
-    summs_titles = []
-    for i,s in enumerate(topics['keywords']):
-        summs_titles.append(dict(summary = ' | '.join(s), titles = ''))
-        for t in topics['titles'][i]:
-             summs_titles.append(dict(summary = '', titles = t.decode('utf8').encode('ascii', 'ignore')))
-    
-    return render_template('output.html',topics=summs_titles)
+        
+    return render_template("pagelayout6.html",
+                           inputdate=inputdate, 
+                           date_ok = date_ok,
+                           data = data)
 
 
 
-#@app.route('/test')
-#def index():
-#    rng = pd.date_range('1/1/2011', periods=7500, freq='H')
-#    ts = pd.Series(np.random.randn(len(rng)), index=rng)
+@app.route('/gdata/')
+#@app.route('/gdata/<string:inputdate>')
+def gdata(inputdate=None):    
+    global data    
+    return json.dumps(data)
+   
+#    inputdate_code = Date2Code(request.args.get('inputdate'))
+#    
+#        
+#    # find topics
+#    min_clust_size = 3
+#    topics = findTopics(inputdate_code, min_clust_size=min_clust_size)
+#    
+#    # format data
+#    ntopics = len(topics['titles'])
+#    A = topics['clustersizes']
+#    kw = [' | '.join(t) for t in topics['keywords']]
+#    summ = ['<br />'.join(t) for t in topics['titles']]
+#    headlines = topics['titles']
 #
-#    graphs = [dict(
-#                data=[
-#                    dict(
-#                    x=ts.index,  # Can use the pandas data structures directly
-#                    y=ts
-#                    )
-#        ]
-#        )
-#    ]
-#
-#
-#    # Add "ids" to each of the graphs to pass up to the client
-#    # for templating
-#    ids = ['graph-{}'.format(i) for i, _ in enumerate(graphs)]
-#
-#    # Convert the figures to JSON
-#    # PlotlyJSONEncoder appropriately converts pandas, datetime, etc
-#    # objects to their JSON equivalents
-#    graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
-#
-#    return render_template('index.html',
-#                           ids=ids,
-#                           graphJSON=graphJSON)
+#    colscale = ["#e5e5e5","#e5d5cc","#e5c5b2","#e5b599","#e5a47f",
+#                "#e59466","#e5844c","#e57433"]+["#e56419"]*1000
+#    col = [colscale[i - min_clust_size] for i in A]
+#   
+#    return json.dumps([{"area": A[i], 
+#                        "color": col[i], 
+#                        "keywords": kw[i],
+#                        "summary": summ[i],
+#                        "headlines": headlines[i]} 
+#                      for i in range(ntopics)])
+#        
 
-if __name__ == "__main__":
-    import os
-
-    # Open a web browser pointing at the app.
-    port = 7000
-
-    os.system("open http://localhost:{0}/".format(port))
-
-    # Set up the development server on port 8000.
-    app.debug = True
-    app.run(port=port)
+#if __name__ == "__main__":
+#    import os
+#
+#    # Open a web browser pointing at the app.
+#    port = 8000
+#
+#    os.system("open http://localhost:{0}/".format(port))
+#
+#    # Set up the development server on port 8000.
+#    app.debug = True
+#    app.run(port=port)
