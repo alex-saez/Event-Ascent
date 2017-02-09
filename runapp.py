@@ -7,7 +7,7 @@ Created on Thu Jan 26 18:04:19 2017
 """
 
 from flaskapp import app
-app.run(debug = True)
+app.run(debug = True, port=8000)
 
 #    import os
 #
