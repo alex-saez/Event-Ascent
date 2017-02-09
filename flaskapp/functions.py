@@ -91,6 +91,7 @@ def sortHeadlines(DDtrunc, dist_matrix, art_inds):
                                          t.find('?')>-1, 
                                          t.find('what you need to know')>-1, 
                                          t.find('what we know')>-1,
+                                         t.find('what to look for')>-1,
                                          t.find('the latest')>-1, 
                                          t.find('timeline-')>-1])))
         else:
