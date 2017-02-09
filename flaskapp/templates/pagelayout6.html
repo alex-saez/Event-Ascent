@@ -30,6 +30,15 @@
             margin-right: 0px;
         }
 
+        #date_input_area { 
+            width: 450px;
+/*            border-width: 1px;
+            border-color: #000000;
+            border-style: solid;
+*/            margin-left: auto; margin-right: auto;
+            padding: 5px;
+        }
+
         #vizandlabel { 
             height:700;
             background-color:#dddddd ;
@@ -55,7 +64,7 @@
         }
 
         #summWin {
-            padding-left: 0px;
+            padding-left: 10px;
             font-size: 18px;
             background-color:#dddddd ;
         }
@@ -64,8 +73,18 @@
             background-color:#dddddd ;
         }
 
+        #subtitle{
+            margin-left: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 50px;
+        }
+
         h3 {
-            margin: 0px;
+            margin: 5px;
             padding-bottom: 5px;
         }
 
@@ -98,19 +117,24 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Date Explorer</a></li>
-            <li><a href="#contact">About</a></li>
+            <li><a href="/about/">About</a></li>
             <li><a href="/gdata/">See data</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
- <br><br><br>
+    <br><br><br>
 
-    <div class = "container" style="height:50px;">
+    <h1> News Snap </h1>
+    <br>    
+    <h4 id="subtitle"> Select date to see what News Snap would have identified as the main topics of the day using the New York Times as the unique news source</h4>
+    <h5 id="subtitle"> (Date range: March 15 2016 - Feb 5 2017) </h5>
+
+    <div id="date_input_area" style="height:50px;">
       <form  action="/" method="GET">
         <div class="form-group">
-            <label for="date"> <h4>Pick Date of Interest:</h4> </label>
+            <label for="date"> <h4>Date of Interest:</h4> </label>
             <span style="display:inline-block; width: 20px;"></span>
             <input id="inputdate" name='inputdate' type="date" value="{{inputdate}}">
             <span style="display:inline-block; width: 20px;"></span>
@@ -119,28 +143,29 @@
       </form>
     </div>
 
+    <br>
 
-<div id = "mainblock">
+    <div id = "mainblock">
 
-    <div id = "vizandlabel">
-        <div id = "vizandlabelbox">
-            <div id = "topicslabel" >
-                <span style="display:inline-block; width: 10px;"></span>
-                <label for="date"> <h4>Main topics of the day on the NY Times. Hover to see headlines</h4> </label>
+        <div id = "vizandlabel">
+            <div id = "vizandlabelbox">
+                <div id = "topicslabel" >
+                    <span style="display:inline-block; width: 10px;"></span>
+                    <label for="date"> <h4>Topics dominating the news (hover to see headlines)</h4> </label>
+                </div>
+                
+                <div id="viz" class = "vizwin" ></div>
             </div>
-            
-            <div id="viz" class = "vizwin" ></div>
         </div>
+
+
+        <div id="summary">
+            <label > <h3 id="ntopics"></h3> </label>
+            <label> <h3>Headlines, sorted by relevance (click to read article):</h3> </label>
+            <div id="summWin" style="width:700px;"> </div>
+        </div>
+
     </div>
-
-
-    <div id="summary">
-        <label > <h3 id="ntopics"></h3> </label>
-        <label> <h3>Headlines, sorted by relevance (click to read article):</h3> </label>
-        <div id="summWin" style="width:700px;"> </div>
-    </div>
-
-</div>
 
 
 
