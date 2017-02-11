@@ -7,11 +7,11 @@ News Snap ([newssnap.press]( http://newssnap.press)) is an auto-curated daily ne
 - `runapp.py`: main application
 - `flaskapp`: application module
     - `__init__.py`
-    - `views.py`: primary flask function for generating web app
-    - `main.py`: contains mian functions (findTopics) for extracting the main topics from a corpus of news articles
-    - `functions.py`: contains simple auxiliary functions called by views.py and main.py
-    - `static`: contains standard bootstrap files for creating the website
+    - `views.py`: primary Flask function for generating web app
+    - `main.py`: contains the main function (findTopics) for identifying the important topics within a corpus of news articles
+    - `functions.py`: contains the auxiliary functions called by views.py and main.py
     - `templates`: contains the HTML files for the different pages (tabs) within website
+    - `static`: contains the standard Bootstrap files website layout
     
 ### Data
 
