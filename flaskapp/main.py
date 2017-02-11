@@ -23,15 +23,15 @@ def findTopics(date,
                dist_param=0.7, 
                link_method = 'single', 
                min_clust_size = 3, 
-               max_n_topics = 10, 
+               max_n_topics = 5, 
                n_summ_words = 5):
     
     
     # get data from SQL table:
     host =  "/var/run/postgresql/"
-    con = psycopg2.connect(database = 'nytimes', user = 'ubuntu', host=host)    
+    con = psycopg2.connect(database = 'nytimes', user = 'ubuntu')    
     sql_query = """
-                SELECT * FROM alldata_lemm2 WHERE date_in>={} AND date_in<={};
+                SELECT * FROM alldata_lemm3 WHERE date_in>={} AND date_in<={};
                 """.format(date-days_past, date)   
     DDtrunc = pd.read_sql_query(sql_query, con)
     DDtrunc = DDtrunc.ix[DDtrunc.content_lemmas != '',:]
