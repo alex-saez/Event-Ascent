@@ -1,7 +1,9 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-This file is part of the flask+d3 Hello World project.
+Created on Thu Jan 26 09:50:26 2017
+
+@author: alex
 """
 import json
 from flask import request, render_template
@@ -48,11 +50,10 @@ def gindex():
     
     
         
-    return render_template("pagelayout6.html",
+    return render_template("mainpage.html",
                            inputdate=inputdate, 
                            date_ok = date_ok,
                            data = data)
-
 
 
 @app.route('/gdata/')
@@ -60,11 +61,13 @@ def gindex():
 def gdata(inputdate=None):    
     global data    
     return json.dumps(data)
+
    
 @app.route('/about/')
 #@app.route('/gdata/<string:inputdate>')
 def display_about():    
     return render_template("aboutpage.html")
+
    
 @app.route('/slideshow/')
 #@app.route('/gdata/<string:inputdate>')

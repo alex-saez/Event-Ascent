@@ -60,6 +60,7 @@ def selectSections(D):
 
 
 def getMainTerms(tfidf_vec_list, dictionary, n_top_words=5):
+    # extracts keywords for labelling topics
     banned_words = ['mr','mrs','be']
     flat_list = [i for l in tfidf_vec_list for i in l]
     terms = [t[0] for t in flat_list]
@@ -74,12 +75,14 @@ def getMainTerms(tfidf_vec_list, dictionary, n_top_words=5):
 
 
 def sortHeadlines(DDtrunc, dist_matrix, art_inds):
-    # indices for sorting according to distance to others in the cluster
+    # sorts headlines base on relevance to topic
+    
+    # indices for sorting according to distance to others in the cluster:
     DDtrunc_subset = DDtrunc.iloc[art_inds]
     mean_dists = np.sum(dist_matrix[art_inds,:][:,art_inds], axis=0)
     dist_ind = np.argsort(mean_dists)
     
-    # indices for sorting according to section
+    # indices for sorting according to section:
     bad_sections = ['opinion','blogs','upshot','magazine','t-magazine']
     is_bad_section = [int(s in bad_sections) for s in DDtrunc_subset.section]      
 
@@ -97,7 +100,7 @@ def sortHeadlines(DDtrunc, dist_matrix, art_inds):
         else:
             has_bad_punct.append(0)
     
-    # finally sort first by section, then by wording, then by distance
+    # finally sort first by section, then by wording, then by distance:
     dtype = [('ind', int), ('sect', int), ('punct', int), ('dist', int)]
     values = [(i, is_bad_section[i], has_bad_punct[i], dist_ind[i]) for i in range(len(art_inds))]
     a = np.array(values, dtype=dtype) 
@@ -107,7 +110,7 @@ def sortHeadlines(DDtrunc, dist_matrix, art_inds):
 
 
 def Date2Code(date):
-    # input format: 'yyyy-mm-dd'   
+    # input format: 'mm/dd/yyyy'   
     date_num = [int(i) for i in date.split('/')]
     day_diff = datetime.date(date_num[2],date_num[0],date_num[1]) - datetime.date(2016,3,15)
     return 5919 + day_diff.days
