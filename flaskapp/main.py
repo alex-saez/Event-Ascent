@@ -31,7 +31,7 @@ def findTopics(date,
     host =  "/var/run/postgresql/"
     con = psycopg2.connect(database = 'nytimes', user = 'ubuntu')    
     sql_query = """
-                SELECT * FROM alldata_lemm3 WHERE date_in>={} AND date_in<={};
+                SELECT * FROM alldata_lemm2 WHERE date_in>={} AND date_in<={};
                 """.format(date-days_past, date)   
     DDtrunc = pd.read_sql_query(sql_query, con)
     DDtrunc = DDtrunc.ix[DDtrunc.content_lemmas != '',:]
