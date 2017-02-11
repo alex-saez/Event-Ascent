@@ -15,7 +15,7 @@ from functions import Date2Code, assignColors
 
 @app.route("/")
 @app.route('/<int:inputdate>')
-def gindex():
+def displaymain():
     global data
    
     inputdate = request.args.get('inputdate','04/25/2016')
@@ -57,20 +57,21 @@ def gindex():
 
 
 @app.route('/gdata/')
-#@app.route('/gdata/<string:inputdate>')
 def gdata(inputdate=None):    
     global data    
     return json.dumps(data)
 
    
 @app.route('/about/')
-#@app.route('/gdata/<string:inputdate>')
 def display_about():    
     return render_template("aboutpage.html")
 
    
 @app.route('/slideshow/')
-#@app.route('/gdata/<string:inputdate>')
 def display_slides():    
     return render_template("slidespage.html")
+   
+@app.route('/aboutme/')
+def display_aboutme():    
+    return render_template("aboutmepage.html")
    
