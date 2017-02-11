@@ -13,52 +13,9 @@ import datetime
 from sqlalchemy import create_engine
 
 
-def getData():   
-    con = psycopg2.connect(database = 'nytimes', user = 'alex')
-    sql_query = "SELECT * FROM alldata;"
-    D = pd.read_sql_query(sql_query,con) # execute SQL query from Python
-    del D['row.names']
-    return D
 
-def lemmatizeContent(D):  
-    D['content_lemmas'] = D.content.apply(utils.lemmatize)
-    D.content_lemmas =  D.content_lemmas.apply (lambda l: ' '.join(l))
-    return D
-
-
-def selectTimewin(D,t1,t2):
-    ind = (D.date_in >= t1) & (D.date_in<=t2)
-    return D.ix[ind,:]
-    
-def writeToSQL(D, name):
-    engine = create_engine('postgres://%s@localhost/%s'%('alex','nytimes')) 
-    D.to_sql(name, engine, if_exists='replace')
-
-
-def selectSections(D):
-    keep_sections = ['magazine',
-                     'us',
-                     'health',
-                     'world',
-                     'blogs',
-                     'nytnow',
-                     'science',
-                     'upshot',
-                     'opinion',
-                     'arts',
-                     't-magazine',
-                     'technology',
-                     'business',
-                     'sports',
-                     'obituaries',
-                     'education',
-                     'afternoonupdate',
-                     'well']
-    
-    return D.iloc[[(D.loc[i,'section'] in keep_sections) for i in D.index],:]
-
-
-
+ #%% FUNCTIONS NEEDED FOR RUNNING APP
+ 
 def getMainTerms(tfidf_vec_list, dictionary, n_top_words=5):
     # extracts keywords for labelling topics
     banned_words = ['mr','mrs','be']
@@ -148,6 +105,52 @@ def assignColors(values, col1, col2):\
     
     
     
+ #%% AUXILIARY FUNCTIONS FOR PREPPING DATA (ONE-TIME USE)
+
+def getData():   
+    con = psycopg2.connect(database = 'nytimes', user = 'alex')
+    sql_query = "SELECT * FROM alldata;"
+    D = pd.read_sql_query(sql_query,con) # execute SQL query from Python
+    del D['row.names']
+    return D
+
+def lemmatizeContent(D):  
+    D['content_lemmas'] = D.content.apply(utils.lemmatize)
+    D.content_lemmas =  D.content_lemmas.apply (lambda l: ' '.join(l))
+    return D
+
+
+def selectTimewin(D,t1,t2):
+    ind = (D.date_in >= t1) & (D.date_in<=t2)
+    return D.ix[ind,:]
+    
+def writeToSQL(D, name):
+    engine = create_engine('postgres://%s@localhost/%s'%('alex','nytimes')) 
+    D.to_sql(name, engine, if_exists='replace')
+
+
+def selectSections(D):
+    keep_sections = ['magazine',
+                     'us',
+                     'health',
+                     'world',
+                     'blogs',
+                     'nytnow',
+                     'science',
+                     'upshot',
+                     'opinion',
+                     'arts',
+                     't-magazine',
+                     'technology',
+                     'business',
+                     'sports',
+                     'obituaries',
+                     'education',
+                     'afternoonupdate',
+                     'well']
+    
+    return D.iloc[[(D.loc[i,'section'] in keep_sections) for i in D.index],:]
+
 
 #%%
 
