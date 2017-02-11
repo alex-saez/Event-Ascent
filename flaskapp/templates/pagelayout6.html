@@ -18,6 +18,7 @@
 
     <script src="http://d3js.org/d3.v2.js"></script> 
 
+     <!-- jQueary for calendar -->
     <title>jQuery UI Datepicker - Default functionality</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
@@ -46,7 +47,8 @@
 
         #date_input_area { 
             width: 350px;
-            margin-left: auto; margin-right: auto;
+            margin-left: auto; 
+            margin-right: auto;
             padding: 5px;
         }
 
@@ -57,13 +59,9 @@
             font-size: 16px;
        }
 
-        #vizandlabel { 
-            height:700;
-            background-color:#dddddd ;
-        }
 
         #vizandlabelbox { 
-            height:700;
+            height:240px;
             background-color:#888888 ;
             border-style: solid;
             border-width: 2px;
@@ -72,10 +70,9 @@
 
         #topicslabel { 
             height:40px;
+            text-align: center;
         }
 
-        #vizwin { 
-        }
 
         #summary {
             padding-left: 20px;
@@ -99,7 +96,7 @@
 
         h1 {
             text-align: center;
-            font-size: 55px;
+            font-size: 60px;
         }
 
         h3 {
@@ -131,13 +128,13 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">newSSnap</a>
+          <a class="navbar-brand" href="#">news snap</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Date Explorer</a></li>
+            <li class="active"><a href="/">Date Explorer</a></li>
             <li><a href="/about/">About</a></li>
-            <li><a href="/gdata/">See data</a></li>
+            <li ><a href="/slideshow/">Slideshow</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -145,7 +142,7 @@
 
     <br><br><br>
 
-    <h1> newSSnap </h1>
+    <h1> news snap </h1>
     <br>    
     <h4 id="subtitle"> Select date to see what News Snap would have identified as the main topics of the day using the New York Times as the unique news source</h4>
     <h5 id="subtitle"> (Date range: March 15 2016 - Feb 5 2017) </h5>
@@ -169,7 +166,6 @@
 
     <div id = "mainblock">
 
-        <div id = "vizandlabel">
             <div id = "vizandlabelbox">
                 <div id = "topicslabel" >
                     <span style="display:inline-block; width: 10px;"></span>
@@ -178,7 +174,6 @@
                 
                 <div id="viz" class = "vizwin" ></div>
             </div>
-        </div>
 
 
         <div id="summary">
@@ -199,10 +194,7 @@
     var display_summary = function (d) {
         temp =  d3.selectAll("#summWin")          
         temp.selectAll("*").remove();
-        //temp.append("svg")
-            //.append("svg:g")
-
-       for ( var k=0; k<d.headlines.length; k++){
+        for ( var k=0; k<d.headlines.length; k++){
             temp.append("html")
                 .attr("y", 15)
                 .style("font-size", 18)

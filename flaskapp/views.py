@@ -64,5 +64,10 @@ def gdata(inputdate=None):
 @app.route('/about/')
 #@app.route('/gdata/<string:inputdate>')
 def display_about():    
-    return "Coming very soon!"
+    return render_template("aboutpage.html")
+   
+@app.route('/slideshow/')
+#@app.route('/gdata/<string:inputdate>')
+def display_slides():    
+    return render_template("slidespage.html")
    

@@ -135,9 +135,9 @@ def assignColors(values, col1, col2):\
     blue2 = int(col2[5:7], 16)
      
     values = [i - min(values) for i in values]
-    redramp = np.linspace(red1, red2, max(values)+1)
-    greenramp = np.linspace(green1, green2, max(values)+1)
-    blueramp = np.linspace(blue1, blue2, max(values)+1)
+    redramp = np.flipud(np.linspace(red2, red1, max(values)+1))
+    greenramp = np.flipud(np.linspace(green2, green1, max(values)+1))
+    blueramp = np.flipud(np.linspace(blue2, blue1, max(values)+1))
        
     return ['#%02x%02x%02x' % (redramp[values[i]], greenramp[values[i]], blueramp[values[i]])
             for i in range(len(values))]
