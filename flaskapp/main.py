@@ -29,7 +29,7 @@ def findTopics(date,
     
     # get data from SQL table:
     host =  "/var/run/postgresql/"
-    con = psycopg2.connect(database = 'nytimes', user = 'ubuntu')    
+    con = psycopg2.connect(database = 'nytimes', user = 'ubuntu', host = host)    
     sql_query = """
                 SELECT * FROM alldata_lemm2 WHERE date_in>={} AND date_in<={};
                 """.format(date-days_past, date)   
