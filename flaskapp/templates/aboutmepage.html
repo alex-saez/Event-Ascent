@@ -8,7 +8,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+    <link rel="icon" href="../static/images/flavicon.ico">
 
     <title>News Snap</title>
 
@@ -23,26 +23,53 @@
 
     <style>
 
+        .navbar { 
+            background-color:#3bafda;
+            border-bottom: 0px;
+        }
+
  
+        .nav.navbar-nav li a {
+            color: white;
+            font-size: 16px;
+       }
+        .nav.navbar-nav li a:hover { 
+            background-color: #355d71;
+        }
+
+        .nav.navbar-nav li.active a {
+            color: white;
+            font-size: 16px;
+            background-color:#2d353d;
+       }
+        .nav.navbar-nav li.active a:hover { 
+            background-color: #2d353d;
+        }
+
+
         .bodyclass { 
-            background-color:#dddddd ;
+            background-color:#2d353d ;
         }
 
         h1 {
             text-align: left;
             font-size: 35px;
             padding-left: 60px;
-       }
+            color: #d6d8da;
+        }
 
         #maintext { 
             width:800px;
             padding-left: 60px;
             font-size: 18px;
+            color: #d6d8da;
         }
+
 
         #links {
             font-size: 18px;
-            font-weight: normal;            
+            font-weight: normal;
+             color: #d6d8da;                       
        }
 
 
@@ -56,14 +83,11 @@
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand">News Snap</a>
-        </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="/">Date Explorer</a></li>
             <li><a href="/about/">About</a></li>
-            <li><a href="/slideshow/">Slideshow</a></li>
+            <li ><a href="/slideshow/">Slideshow</a></li>
             <li class="active"><a href="/aboutme/">About Me</a></li>
           </ul>
         </div>
@@ -83,13 +107,13 @@
         <br><br>
 
         <label> 
-            <img src="../static/images/github_icon.png" align="left" style="width:25px;height:25px;">
+            <img src="../static/images/github_icon2.png" align="left" style="width:25px;height:25px;">
             <span style="display:inline-block; width: 5px;"></span>
             <a href='https://github.com/alex-saez' target="_blank" id="links"> GitHub </a>  
         </label>
             <span style="display:inline-block; width: 30px;"></span>
         <label> 
-            <img src="../static/images/linked_icon.png" align="left" style="width:25px;height:25px;">
+            <img src="../static/images/linked_icon2.png" align="left" style="width:25px;height:25px;">
             <span style="display:inline-block; width: 5px;"></span>
             <a href='https://linkedin.com/in/alex-saez' target="_blank" id="links"> LinkedIn </a>  
         </label>

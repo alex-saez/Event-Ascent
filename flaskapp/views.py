@@ -39,7 +39,7 @@ def displaymain():
         summ = ['<br />'.join(t) for t in topics['titles']]
         headlines = topics['titles']
         urls = topics['urls']
-        col = assignColors(A, "#f2f0f7", "#807dba")
+        col = assignColors(A, "#deebf7", "#6baed6")
         data = [{"area": A[i], 
                 "color": col[i], 
                 "keywords": kw[i],
