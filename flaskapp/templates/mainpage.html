@@ -8,9 +8,10 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+    <link rel="icon" href="../static/images/flavicon.ico">
 
     <title>News Snap</title>
+
 
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
@@ -34,10 +35,32 @@
 
     <style>
 
-        .bodyclass { 
-            background-color:#dddddd ;
+        .navbar { 
+            background-color:#3bafda;
+            border-bottom: 0px;
         }
 
+ 
+        .nav.navbar-nav li a {
+            color: white;
+            font-size: 16px;
+       }
+        .nav.navbar-nav li a:hover { 
+            background-color: #355d71;
+        }
+
+        .nav.navbar-nav li.active a {
+            color: white;
+            font-size: 16px;
+            background-color:#2d353d;
+       }
+        .nav.navbar-nav li.active a:hover { 
+            background-color: #2d353d;
+        }
+
+        .bodyclass { 
+            background-color:#2d353d ;
+        }
 
         #mainblock { 
             display: flex;
@@ -46,24 +69,30 @@
         }
 
         #date_input_area { 
-            width: 350px;
-            margin-left: auto; 
-            margin-right: auto;
+            width: 450px;
+            margin-left: 50px; 
+            margin-bottom: 20px; 
+            /*margin-right: auto;*/
             padding: 5px;
         }
 
         #datepicker { 
             width: 120px;
-            height: 30px;
+            height: 35px;
             text-align: center;
             font-size: 16px;
-       }
+            background-color: #575e65;
+            border-radius: 5px;
+            color: white;
+      }
 
 
         #vizandlabelbox { 
             height:240px;
-            background-color:#888888 ;
+            background-color:#323b44 ;
             border-style: solid;
+            border-color: #3b424a;
+            border-radius: 20px;
             border-width: 2px;
             margin-left: 10px;
         }
@@ -71,50 +100,63 @@
         #topicslabel { 
             height:40px;
             text-align: center;
-        }
+       }
 
 
         #summary {
             padding-left: 20px;
             font-size: 18px;
+            background-color:#323b44 ;
+            border-style: solid;
+            border-color: #3b424a;
+            border-radius: 20px;
+            border-width: 2px;
+            margin-left: 10px;
         }
 
         #summWin {
             padding-left: 10px;
             font-size: 18px;
-            background-color:#dddddd ;
         }
 
         #headline {
-            background-color:#dddddd ;
+            background-color:#2d353d ;
         }
 
         #subtitle{
             margin-left: 20px;
+            margin-bottom: 40px;
             text-align: center;
+            color: white;
         }
 
         h1 {
             text-align: center;
             font-size: 60px;
+            color: #d6d8da;
         }
 
         h3 {
             margin: 5px;
             padding-bottom: 5px;
+            color: #d6d8da;
         }
 
         h4 {
             color: black;
             padding-top: 0px;
             padding-bottom: 0px;
+            color: #d6d8da;
         }
 
 
-        .btn-default{
-            height:30px;
-            width:50px;
+        .btn-primary{
+            height:35px;
+            width:55px;
             padding:0px;
+            border-style: none;
+            background-color: #414a58;
+            color: white;
         }
 
     </style>
@@ -127,9 +169,6 @@
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand">News Snap</a>
-        </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/">Date Explorer</a></li>
@@ -137,7 +176,7 @@
             <li ><a href="/slideshow/">Slideshow</a></li>
             <li ><a href="/aboutme/">About Me</a></li>
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>
       </div>
     </nav>
 
@@ -145,25 +184,21 @@
 
     <h1> News Snap </h1>
     <br>    
-    <h4 id="subtitle"> Select date to see what News Snap would have identified as the main topics of the day using the New York Times as the unique news source</h4>
-    <h5 id="subtitle"> (Date range: March 15 2016 - Feb 5 2017) </h5>
+    <h4 id="subtitle"> Select date to see what News Snap would have identified as the main topics of the day using the New York Times as the news source</h4>
+    <br>
 
    <div id="date_input_area" style="height:50px;">
        <form  action="/" method="GET">
         <div class="form-group">
-            <label for="date"> <h4>Date of Interest:</h4> </label>
+            <label for="date"> <h3>Date of Interest:</h3> </label>
             <span style="display:inline-block; width: 5px;"></span>
             <input type="text" id="datepicker" name='inputdate' value="{{inputdate}}">
             <span style="display:inline-block; width: 5px;"></span>
-            <button type="submit" class="btn btn-default btn-lg">Go</button>
+            <button type="submit" class="btn btn-primary btn-lg">Go</button>
         </div>
       </form>
-    
+    </div>
 
-
-</div>
-
-    <br>
 
     <div id = "mainblock">
 

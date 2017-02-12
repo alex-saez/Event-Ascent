@@ -8,7 +8,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+    <link rel="icon" href="../static/images/flavicon.ico">
 
     <title>News Snap</title>
 
@@ -23,21 +23,40 @@
 
     <style>
 
+       .navbar { 
+            background-color:#3bafda;
+            border-bottom: 0px;
+        }
+
+ 
+        .nav.navbar-nav li a {
+            color: white;
+            font-size: 16px;
+       }
+        .nav.navbar-nav li a:hover { 
+            background-color: #355d71;
+        }
+
+        .nav.navbar-nav li.active a {
+            color: white;
+            font-size: 16px;
+            background-color:#2d353d;
+       }
+        .nav.navbar-nav li.active a:hover { 
+            background-color: #2d353d;
+        }
+
+
         .bodyclass { 
-            background-color:#dddddd ;
+            background-color:#2d353d ;
         }
 
-
-/*        #slides { 
-            margin-left: 5%; 
-            margin-right: auto;
-        }
-
-*/
         h1 {
             text-align: center;
             font-size: 60px;
+            color: #d6d8da;
         }
+
 
 
     </style>
@@ -50,9 +69,6 @@
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand">News Snap</a>
-        </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="/">Date Explorer</a></li>
@@ -60,7 +76,7 @@
             <li class="active"><a href="/slideshow/">Slideshow</a></li>
             <li ><a href="/aboutme/">About Me</a></li>
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>
       </div>
     </nav>
 
