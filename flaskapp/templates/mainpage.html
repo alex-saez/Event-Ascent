@@ -80,7 +80,7 @@
             width: 120px;
             height: 35px;
             text-align: center;
-            font-size: 16px;
+            font-size: 18px;
             background-color: #575e65;
             border-radius: 5px;
             color: white;
@@ -120,14 +120,14 @@
         }
 
         #headline {
-            background-color:#2d353d ;
+            background-color:#323b44 ;
         }
 
         #subtitle{
             margin-left: 20px;
             margin-bottom: 40px;
             text-align: center;
-            color: white;
+            color: #d6d8da;
         }
 
         h1 {
@@ -296,22 +296,24 @@
             .attr("width", 550)
             .attr("height", 50)
             .append("svg:g")
-            .attr("transform", "translate(10,20)")
+            .attr("transform", "translate(10,30)")
             .append("text")
                 .attr("x", 30)
                 .attr("y", 10)
-                .style("font-size", 20)
+                .style("font-size", 28)
+                .attr("fill", "#ffaa00") 
                 .text("Sorry, this date is out of range... ")
          d3.select("#viz")
            .append("svg")
             .attr("width", 550)
             .attr("height", 50)
             .append("svg:g")
-            .attr("transform", "translate(10,10)")
+            .attr("transform", "translate(10,20)")
             .append("text")
                 .attr("x", 30)
                 .attr("y", 10)
                 .style("font-size", 20)
+                .attr("fill", "#ffaa00") 
                 .text("Pick a date between 03/15/2016 and 02/05/2017")
    } 
 
